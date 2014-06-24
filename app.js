@@ -1,10 +1,16 @@
+var argv = require('optimist')
+    .default({ 
+      subConn: "tcp://localhost:1112",
+      mongoConn: "mongodb://localhost/test" 
+    })
+    .argv;
 var mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost/test");
+mongoose.connect(argv.mongoConn);
 var zmq = require("zmq");
 var subscriber = zmq.socket("sub");
-subscriber.connect("tcp://localhost:1112");
+subscriber.connect(argv.subConn);
 subscriber.subscribe("");
-console.log("Connecting to the 1112...");
+console.log("Connecting to the " + argv.subConn);
 
 var schema = new mongoose.Schema({
   id: String,
